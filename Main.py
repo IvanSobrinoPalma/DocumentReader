@@ -41,8 +41,10 @@ class Paragraph(IParagraph):
                 paragraph = ""
                 current_title = line
             if(start_regex.match(line)):
-                paragraph += line + "\n"
+                paragraph += line + " \n"
                 current_title = line
+            if(current_title and not start_regex.match(line)):
+                paragraph += line + " \n"
         return paragraphs
             
         
@@ -58,3 +60,5 @@ file_name = "./files/esccrpqpl005iss235.pdf"
 file_read = OpenPDF.open(file_name)
 
 content = ReadPDF.read_file(file_read, 3)
+
+print(Paragraph.get_paragraphs(content, re.compile(r'[A-Z][a-zA-Z -]+:\s*$'), re.compile(r'[A-Z][a-zA-Z -]+:\s*$')))
