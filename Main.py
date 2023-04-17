@@ -18,17 +18,20 @@ class IParagraph(ABC):
     def get_paragraphs():
         pass
 
-
-
 class OpenPDF(IOpen):
     def open(path):
         file = pdfplumber.open(path)
         return file
 
-class ReadPDF(IRead):
+class ReadPDFText(IRead):
     def read_file(file , page):
         content = file.pages[page -1].extract_text()
         return content
+
+class ReadPDFTable(IRead):
+    def read_file(file , page):
+        content = file.pages[page -1].extract_table()
+        return content[1][1]
 
 class Paragraph(IParagraph):
     def get_paragraphs(content, start_regex :re, end_regex :re = None):
@@ -36,8 +39,7 @@ class Paragraph(IParagraph):
         paragraphs = []
         paragraph = ""
         current_title = ""
-        content_list = content.split("\n") 
-        for i, line in enumerate(content_list):
+        for line in content.split("\n"):
             if(end_regex.match(line) and line != current_title and current_title != ""):
                 paragraphs.append(paragraph)
                 paragraph = ""
@@ -47,25 +49,25 @@ class Paragraph(IParagraph):
                 current_title = line
             if(current_title and not start_regex.match(line)):
                 paragraph += line + " \n"
-            if i == len(content_list)-1 :
-                paragraphs.append(paragraph)
         return paragraphs
             
-
+        
                 
 
 
-file_name = "./files/DSCCFile.pdf"
-file_name_2 = "./files/esccrpqpl005iss235.pdf"
 
-extension_re = re.compile(r'(?:\d{4}\s)?[A-Z][a-zA-Z -]+:\s*')
-DSCC_re = re.compile(r'Document:\s*')
+
+
+file_name = "./files/DSCCFile.pdf"
 
 
 file_read = OpenPDF.open(file_name)
 
-content = ReadPDF.read_file(file_read, 1)
+content = ReadPDFText.read_file(file_read, 1)
 
-for line in Paragraph.get_paragraphs(content, DSCC_re):
-    print("+========================================================+")
+CERTIFICATE = re.compile(r'\d{2,3}[a-zA-Z](?:[rev]{3}\d?)?+,')
+CORREO = re.compile(r'Document:\s*')
+
+for line in Paragraph.get_paragraphs(content, re.compile(r'Document:\s+')):
     print(line)
+    print("*=======================================================")
