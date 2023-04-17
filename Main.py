@@ -44,17 +44,14 @@ class Paragraph(IParagraph):
                 paragraph += line + "\n"
                 current_title = line
         return paragraphs
-            
-        
-                
 
-
-
-
-
-file_name = "./files/esccrpqpl005iss235.pdf"
+file_name = "files/esccrpqpl005iss235.pdf"
 
 
 file_read = OpenPDF.open(file_name)
 
 content = ReadPDF.read_file(file_read, 3)
+
+paragraphs = Paragraph.get_paragraphs(content, re.compile(r'[A-Z][a-zA-Z -]+:\s*$'), re.compile(r'[A-Z][a-zA-Z -]+:\s*$'))
+
+print(paragraphs)
