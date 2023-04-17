@@ -31,7 +31,8 @@ class ReadPDF(IRead):
         return content
 
 class Paragraph(IParagraph):
-    def get_paragraphs(content, start_regex :re, end_regex :re):
+    def get_paragraphs(content, start_regex :re, end_regex :re = None):
+        end_regex = start_regex if end_regex is None else end_regex
         paragraphs = []
         paragraph = ""
         current_title = ""
@@ -54,11 +55,12 @@ class Paragraph(IParagraph):
 
 
 
-file_name = "./files/esccrpqpl005iss235.pdf"
+file_name = "./files/DSCCFile.pdf"
 
 
 file_read = OpenPDF.open(file_name)
 
-content = ReadPDF.read_file(file_read, 3)
+content = ReadPDF.read_file(file_read, 1)
 
-print(Paragraph.get_paragraphs(content, re.compile(r'[A-Z][a-zA-Z -]+:\s*$'), re.compile(r'[A-Z][a-zA-Z -]+:\s*$')))
+for line in Paragraph.get_paragraphs(content, re.compile(r'Document:\s+')):
+    print(line)
