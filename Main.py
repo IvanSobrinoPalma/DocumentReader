@@ -36,7 +36,8 @@ class Paragraph(IParagraph):
         paragraphs = []
         paragraph = ""
         current_title = ""
-        for line in content.split("\n"):
+        content_list = content.split("\n") 
+        for i, line in enumerate(content_list):
             if(end_regex.match(line) and line != current_title and current_title != ""):
                 paragraphs.append(paragraph)
                 paragraph = ""
@@ -46,21 +47,25 @@ class Paragraph(IParagraph):
                 current_title = line
             if(current_title and not start_regex.match(line)):
                 paragraph += line + " \n"
+            if i == len(content_list)-1 :
+                paragraphs.append(paragraph)
         return paragraphs
             
-        
+
                 
 
 
-
-
-
 file_name = "./files/DSCCFile.pdf"
+file_name_2 = "./files/esccrpqpl005iss235.pdf"
+
+extension_re = re.compile(r'(?:\d{4}\s)?[A-Z][a-zA-Z -]+:\s*')
+DSCC_re = re.compile(r'Document:\s*')
 
 
 file_read = OpenPDF.open(file_name)
 
 content = ReadPDF.read_file(file_read, 1)
 
-for line in Paragraph.get_paragraphs(content, re.compile(r'Document:\s+')):
+for line in Paragraph.get_paragraphs(content, DSCC_re):
+    print("+========================================================+")
     print(line)
