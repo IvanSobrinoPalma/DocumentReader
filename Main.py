@@ -2,18 +2,22 @@ import re
 from service.OpenPDF import OpenPDF
 from service.Paragraph import Paragraph
 from service.ReadPdfTable import ReadPDFTable
+from service.Filter import Filter
 
-file_name = "files\DSCCFile.pdf"
-file_esa = "files\esccrpqpl005iss235.pdf"
 
-file_read = OpenPDF.open(file_esa)
+
+
+file_name = "./files/esccrpqpl005iss235.pdf"
+
+file_read = OpenPDF.open(file_name)
 
 content = ReadPDFTable.read_file(file_read, 3)
 
-TITLE = re.compile(r'^[a-zA-Z\s]+:')
-CERTIFICATE = re.compile(r'\d{2,3}[a-zA-Z](?:[rev]{3}\d?)?+,')
+dictionary = {"Title": re.compile(r'[A-Z][a-zA-Z -]+:\s*'), "Certificate": re.compile(r'\d{2,3}[A-Z](?:[rev]{3}\d)?')}
+
+CERTIFICATE = re.compile(r'[A-Z][a-zA-Z -]+:\s*')
 CORREO = re.compile(r'Document:\s*')
 
-for line in Paragraph.get_paragraphs(content, TITLE):
-    print(line)
-    print("================================================================")
+paragraphs = Paragraph.get_paragraphs(content, CERTIFICATE)
+
+Filter.filter_info(Paragraph.get_paragraphs(content, CERTIFICATE), dictionary)
