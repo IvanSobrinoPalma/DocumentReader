@@ -1,6 +1,6 @@
 from interface.IFilter import IFilter
 
-class Filter(IFilter):
+class FilterESCC(IFilter):
     def filter_info(paragraphs, dictionary):
         final_result = []
         for paragraph in paragraphs:
