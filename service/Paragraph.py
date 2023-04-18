@@ -2,7 +2,7 @@ import re
 from interface.IParagraph import IParagraph
 
 class Paragraph(IParagraph):
-    def get_paragraphs(content, start_regex :re, end_regex :re = None, paragraph_title :re = None):
+    def get_paragraphs(content, start_regex :re, end_regex :re = None):
         end_regex = start_regex if end_regex is None else end_regex
         paragraphs = []
         paragraph = ""

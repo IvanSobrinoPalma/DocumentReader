@@ -12,7 +12,7 @@ class FilterDSCC(IFilter):
                 match_title = False
                 for title in titles:
                     if line.lower().startswith(title.lower()):
-                        # Quitar el titulo y las dos puntos
+                        # Quitar el titulo del contenido
                         text = line[len(title)+2:]
                         current_title = title
                         match_title = True
